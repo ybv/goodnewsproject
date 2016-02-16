@@ -39,6 +39,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'curator.apps.CuratorConfig',
     'rest_framework',
+    'django.contrib.sites',
+    'inviter'
 ]
 
 MIDDLEWARE_CLASSES = [
@@ -51,6 +53,13 @@ MIDDLEWARE_CLASSES = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
+
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework.authentication.BasicAuthentication',
+        'rest_framework.authentication.SessionAuthentication',
+    )
+}
 
 ROOT_URLCONF = 'goodnewsproject.urls'
 
@@ -120,6 +129,7 @@ USE_L10N = True
 
 USE_TZ = True
 
+INVITE_INITIAL_NUMBER_INVITATIONS = 3
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.9/howto/static-files/

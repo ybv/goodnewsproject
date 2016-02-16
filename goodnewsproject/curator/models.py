@@ -14,12 +14,13 @@ class BaseModel(models.Model):
     class Meta:
         abstract = True
 
-class Country(BaseModel):
-    name = models.CharField(max_length=800)
-
 class Location(BaseModel):
     latitude = models.FloatField(blank=True)
     longitude = models.FloatField(blank=True)
+
+class Country(BaseModel):
+    name = models.CharField(max_length=800)
+    location = models.OneToOneField(Location, null=True)
 
 class Author(BaseModel):
     formatted_name = models.CharField(max_length=800)
@@ -27,8 +28,8 @@ class Author(BaseModel):
 class Source(BaseModel):
     name = models.CharField(max_length=800)
     domain = models.CharField(max_length=800)
-    country = models.ManyToManyField(Author)
-    
+    country = models.ManyToManyField(Country)
+
 class Tag(BaseModel):
     name = models.CharField(max_length=800)
 
@@ -41,14 +42,14 @@ class Article(BaseModel):
     tags = models.ManyToManyField(Tag)
     date_published = models.DateTimeField('date published', blank=True, null=True)
     date_crawled = models.DateTimeField(auto_now=True)
+    source = models.OneToOneField(Source, null=True, blank=True)
 
-class Feed(BaseModel):
-    source_name = models.OneToOneField(Source)
+class SourceFeed(BaseModel):
+    source_details = models.OneToOneField(Source)
     url = models.CharField(primary_key=True, max_length=400)
+    created_by = models.OneToOneField(User)
 
 class ArticleClassification(BaseModel):
     user = models.OneToOneField(User)
     article = models.OneToOneField(Article)
     sentiment = models.FloatField(default=0.0)
-    
-    

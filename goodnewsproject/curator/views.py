@@ -1,12 +1,15 @@
+from django.shortcuts import render
+from django.http import HttpResponse
+from django.contrib.auth.models import User
+
 from rest_framework import status
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from curator.models import Article, Feed
-from curator.serializers import ArticleSerializer, FeedSerializer
-from django.shortcuts import render
-from django.http import HttpResponse
-from rest_framework import generics
+from rest_framework import generics,  permissions, serializers
+from rest_framework.authentication import SessionAuthentication
 
+from curator.models import Article, SourceFeed
+from curator.serializers import ArticleSerializer, SourceFeedSerializer, CuratorSerializer
 
 class ArticleList(APIView):
     def get(self, request, format=None):
@@ -28,12 +31,28 @@ class ArticleDetail(APIView):
         return Response(article_serializer.data)
 
 
-class FeedList(generics.ListCreateAPIView):
-    queryset = Feed.objects.all()
-    serializer_class = FeedSerializer
+class SourceFeedList(generics.ListCreateAPIView):
+    queryset = SourceFeed.objects.all()
+    serializer_class = SourceFeedSerializer
+    created_by = serializers.ReadOnlyField(source='created_by.username')
+    authentication_classes = (SessionAuthentication,)
+    permission_classes = (permissions.IsAuthenticated,)
+
+    def perform_create(self, serializer):
+        serializer.save(created_by=self.request.user)
+
+class SourceFeedDetail(generics.RetrieveUpdateDestroyAPIView):
+    queryset = SourceFeed.objects.all()
+    serializer_class = SourceFeedSerializer
+    authentication_classes = (SessionAuthentication,)
+    permission_classes = (permissions.IsAuthenticated,)
 
 
-class FeedDetail(generics.RetrieveUpdateDestroyAPIView):
-    queryset = Feed.objects.all()
-    serializer_class = FeedSerializer
+class CuratorList(generics.ListAPIView):
+    queryset = User.objects.all()
+    serializer_class = CuratorSerializer
 
+
+class CuratorDetail(generics.RetrieveAPIView):
+    queryset = User.objects.all()
+    serializer_class = CuratorSerializer
