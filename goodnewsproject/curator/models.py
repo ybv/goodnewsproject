@@ -53,3 +53,8 @@ class ArticleClassification(BaseModel):
     user = models.OneToOneField(User)
     article = models.OneToOneField(Article)
     sentiment = models.FloatField(default=0.0)
+
+class CuratorInvites(BaseModel):
+    curator_email = models.EmailField()
+    invite_sent = models.BooleanField(default=False)
+    invite_accepted = models.BooleanField()

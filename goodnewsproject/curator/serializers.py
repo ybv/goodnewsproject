@@ -19,3 +19,13 @@ class CuratorSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = ('id', 'first_name', 'sourcefeeds')
+
+class CuratorSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+
+    def to_native(self, obj):
+        """Remove password field when serializing an object"""
+        ret = super(UserSerializer, self).to_native(obj)
+        del ret['password']
+        return ret
