@@ -10,9 +10,14 @@ class ArticleSerializer(serializers.ModelSerializer):
         fields = ('id', 'headline', 'content', 'image_links', 'authors', 'tags', 'possible_links', 'date_published', 'date_crawled')
 
 class SourceFeedSerializer(serializers.ModelSerializer):
+    created_by = serializers.SlugRelatedField(
+       queryset=User.objects.all(),
+       slug_field='username'
+    )
+
     class Meta:
         model = SourceFeed
-        fields = ('id', 'source_details', 'url')
+        fields = ('id', 'name', 'domain', 'url', 'created_by')
 
 class CuratorSerializer(serializers.ModelSerializer):
     sourcefeeds  = serializers.PrimaryKeyRelatedField(many=True, queryset=SourceFeed.objects.all())

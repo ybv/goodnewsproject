@@ -1,0 +1,52 @@
+{% extends 'base.html' %}
+{% load static from staticfiles %}
+
+{% block content %}
+<div id="root">
+</div>
+
+<script src="{% static 'js/dist/bundle.js' %}"></script>
+<link href='https://fonts.googleapis.com/css?family=Lato:400,700|Open+Sans:400,300' rel='stylesheet' type='text/css'>
+
+<link rel="stylesheet" href="http://yui.yahooapis.com/pure/0.6.0/pure-min.css">
+<link href="stylesheet" href="{% static 'styles/all_styles.css' %}">
+<style>
+html, button, input, select, textarea,
+.pure-g [class *= "pure-u"] {
+    /* Set your content font stack here: */
+    font-family: 'Lato', sans-serif;
+    font-weight:lighter;
+    font-size: 1em;
+    color: #7f8c8d;
+}
+.hero-hello{
+  font-family: 'Open Sans', sans-serif;
+  font-weight: lighter;
+  font-size: 2em;
+  color: #2ecc71;
+}
+.hero-welcome{
+  font-family: 'Open Sans', sans-serif;
+  font-weight: bold;
+}
+.hero-extra{
+  font-size: 0.8em;
+}
+.hello-container{
+  padding-top: 100px;
+  padding-bottom: 50px;
+}
+.error-msg{
+  border: 1px solid #fd747a;
+  padding: 10px 5px 10px 5px;
+  background-color: #fdefe8;
+  color: #fd747a;
+  text-align: center;
+  font-weight: 700;
+}
+a{
+  color: #008cdd;
+}
+</style>
+
+{% endblock %}
