@@ -23,28 +23,14 @@ class Author(BaseModel):
 
 class SourceFeed(BaseModel):
     name = models.CharField(max_length=800, blank=True)
-    domain = models.CharField(max_length=800, blank=True)
     url = models.CharField(max_length=400, blank=True)
-    created_by = models.OneToOneField(User)
+    created_by = models.ForeignKey(User)
+
+    def __unicode__(self):
+        return u"{1}({0})".format(self.url, self.name)
 
 class Tag(BaseModel):
     name = models.CharField(max_length=800)
-
-class Article(BaseModel):
-    headline = models.CharField(max_length=800)
-    content = models.TextField(blank=True)
-    image_links  = ArrayField(models.CharField(max_length=200), blank=True)
-    authors = models.ManyToManyField(Author)
-    possible_links = ArrayField(models.CharField(max_length=200), blank=True)
-    tags = models.ManyToManyField(Tag)
-    date_published = models.DateTimeField('date published', blank=True, null=True)
-    date_crawled = models.DateTimeField(auto_now=True)
-    source = models.OneToOneField(SourceFeed, null=True, blank=True)
-
-class ArticleClassification(BaseModel):
-    user = models.OneToOneField(User)
-    article = models.OneToOneField(Article)
-    sentiment = models.FloatField(default=0.0)
 
 class CuratorInvites(BaseModel):
     curator_email = models.EmailField()
@@ -52,9 +38,16 @@ class CuratorInvites(BaseModel):
     invite_accepted = models.BooleanField()
 
 class RawArticle(models.Model):
-    source_feed = models.ForeignKey(SourceFeed)
-    url = models.CharField(primary_key=True, max_length=400)
+    source_feed = models.ForeignKey(SourceFeed, related_name='source_feed')
+    url = models.CharField(max_length=400)
     content = JSONField()
+    title = models.CharField(max_length=800, blank=True)
+    date_crawled = models.DateTimeField(auto_now=True)
 
     def __unicode__(self):
-        return self.source + self.url
+        return self.source_feed.name + self.url
+
+class ArticleClassification(BaseModel):
+    user = models.ForeignKey(User)
+    article = models.ForeignKey(RawArticle)
+    sentiment = models.FloatField(default=0.0)

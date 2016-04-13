@@ -6,15 +6,14 @@
 </div>
 
 <script src="{% static 'js/dist/bundle.js' %}"></script>
-<link href='https://fonts.googleapis.com/css?family=Lato:400,700|Open+Sans:400,300' rel='stylesheet' type='text/css'>
-
+<link href='https://fonts.googleapis.com/css?family=Lato:400,700|Open+Sans:400,300|PT+Sans' rel='stylesheet' type='text/css'>
 <link rel="stylesheet" href="http://yui.yahooapis.com/pure/0.6.0/pure-min.css">
 <link href="stylesheet" href="{% static 'styles/all_styles.css' %}">
 <style>
 html, button, input, select, textarea,
 .pure-g [class *= "pure-u"] {
     /* Set your content font stack here: */
-    font-family: 'Lato', sans-serif;
+    font-family: 'PT Sans', sans-serif;
     font-weight:lighter;
     font-size: 1em;
     color: #7f8c8d;
@@ -46,6 +45,90 @@ html, button, input, select, textarea,
 }
 a{
   color: #008cdd;
+}
+.list-item{
+  padding: 10px;
+  margin: 5px;
+  border: 1px solid #f0f0f0;
+  background: #ffffff;
+  box-shadow: 1px 1px 1px #d4d4d4;
+}
+.list-title{
+  font-size: 1em;
+  color: #000000;
+  padding-bottom: 10px;
+}
+.list-source-feed{
+  font-size: 0.6em;
+  color: #808080;
+}
+.app-container{
+  background: #f5f7f9;
+  min-height: 100%;
+}
+.source-feed-container{
+  padding: 20px;
+}
+.top-nav{
+  height: 30px;
+  padding: 10px;
+  text-align: center;
+  background: #ffffff;
+  border-bottom:  1px solid #2ecc71;
+  box-shadow: 2px 2px 2px #d4d4d4;
+  margin-bottom: 10px;
+}
+.pure-menu-item{
+  padding: 0 20px 0 20px;
+}
+.button-error{
+  background-color: #e7638c;
+  color: #ffffff;
+}
+.button-success{
+  background-color: #2ecc71;
+  color: #ffffff;
+}
+.mark-button{
+  padding: 20px 0 20px 0;
+}
+.success-msg{
+  border: 1px solid #28cc32;
+  padding: 10px 5px 10px 5px;
+  background-color: #e3fde1;
+  color: #2ecc71;
+  text-align: center;
+  font-weight: 700;
+  z-index: 200;
+}
+.article-details{
+  background-color: #ffffff;
+  padding: 20px;
+  margin-left: 10px;
+  color: #000000;
+}
+.article-desc{
+  color: #808080;
+  font-size: 18px;
+}
+.button-container{
+  margin-left: 10px;
+  text-align: center;
+  background-color: #ffffff;
+}
+.button-container button{
+  width: 200px;
+}
+.search-container{
+  margin-left: 10px;
+  text-align: center;
+  margin-bottom: 30px;
+}
+.Select-input input{
+  width: 250px !important;
+}
+.search-container{
+  z-index: 500;
 }
 </style>
 
