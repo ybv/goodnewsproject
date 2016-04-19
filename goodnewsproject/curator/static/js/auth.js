@@ -49,9 +49,16 @@ module.exports = {
   },
 
   LogoutCurator() {
-    $.get("/curate/logout-curator/").always(() => {
+    var token = localStorage.token
+    $.ajax({
+      url: "/curate/logout-curator/",
+      type: 'GET',
+      beforeSend: function(xhr) {
+        xhr.setRequestHeader("Authorization", "Token " + token)
+      }
+    }).done((data) => {
       delete localStorage.token
-    })
+    });
   },
 
   LoginCurator(email, pass, cb) {

@@ -26,8 +26,13 @@ const DashBoardTopView = React.createClass({
 
     let sfActive = false
     let dashActive = false
+    let curateActive = false
+
     if (pathname.indexOf('sourcefeeds') > -1) {
       sfActive = true
+    }
+    if (pathname.indexOf('classify') > -1) {
+      curateActive = true
     }
     if (!sfActive) {
       dashActive = true
@@ -37,7 +42,7 @@ const DashBoardTopView = React.createClass({
     return (
       <div className="pure-menu pure-menu-horizontal">
         <ul className="pure-menu-list">
-            <li className="pure-menu-item">Logged in as: {username} <Link to="/curate/logout">Log out</Link></li>
+            <li className="pure-menu-item"><Link to="/curate/logout">Log out</Link></li>
               {dashActive && (<li className="pure-menu-item">
                      <Link to="/curate/sourcefeeds">Add Source Feeds</Link>
                 </li>
@@ -45,6 +50,10 @@ const DashBoardTopView = React.createClass({
               {sfActive && (<li className="pure-menu-item">
                      <Link to="/curate">Dashboard</Link>
                 </li>
+      )}
+      {curateActive && (<li className="pure-menu-item">
+             <Link to="/curate">Dashboard</Link>
+        </li>
       )}
         </ul>
     </div>
@@ -237,9 +246,10 @@ const Article = React.createClass({
         <div className="pure-u-1 top-nav">
           <DashBoardTopView pathname={pathname} username="ybv"/>
         </div>
-          <div className="pure-u-1">
-            <div className="pure-g">
-          <div className="pure-u-3-4">
+          <div className="pure-g">
+            <div className="pure-u-1-24">
+            </div>
+          <div className="pure-u-16-24">
             <div className="pure-g article-details">
               <div className="pure-u-1">
                 {this.state.successMsg && <div className="success-msg">{this.state.successMsg}
@@ -265,11 +275,12 @@ const Article = React.createClass({
               </div>
             </div>
           </div>
-          <div className="pure-u-1-4">
+          <div className="pure-u-6-24">
             <div className="pure-u-1 search-container">
               <Select.Async
       name="form-field-name"
       autoload={false}
+      placeholder="Search for an article"
       onChange={(val) => {
         let that = this
         this.setState({
@@ -287,19 +298,24 @@ const Article = React.createClass({
       />
             </div>
             <div className="pure-u-1 button-container">
-              <div className="pure-u-1 mark-button">
-                <button className="pure-button button-success" onClick={this.handleClassify.bind(this, "good")} href="#">Mark as a good article</button>
+              <div className="pure-u-1 mark-button-msg">
+                Mark this as a
               </div>
               <div className="pure-u-1 mark-button">
-                <button className="pure-button  button-error" onClick={this.handleClassify.bind(this, "bad")} href="#">Mark as a bad article</button>
+                <button className="pure-button button-success" onClick={this.handleClassify.bind(this, "good")} href="#">Positive article</button>
               </div>
               <div className="pure-u-1 mark-button">
-                <button className="pure-button" onClick={this.handleClassify.bind(this, "neutral")} href="#">Mark as a neutral article</button>
+                <button className="pure-button  button-error" onClick={this.handleClassify.bind(this, "bad")} href="#">Negative article</button>
+              </div>
+              <div className="pure-u-1 mark-button">
+                <button className="pure-button" onClick={this.handleClassify.bind(this, "neutral")} href="#">Neutral article</button>
               </div>
             </div>
           </div>
-        </div>
+          <div className="pure-u-1-24">
           </div>
+        </div>
+
       </div>
     )
   }
@@ -368,7 +384,7 @@ const ArticleList = React.createClass({
     const artcileList = this.state.articles.map((item) => {
       const linkItem = "/curate/classify/" + item.id
       return (
-        <div className="pure-u-1">
+        <div key={item.id} className="pure-u-1">
         <Link to={linkItem}>
           <div className="list-item">
             <div className="list-title">{item.content.title}</div>
@@ -386,17 +402,25 @@ const ArticleList = React.createClass({
               <div className="pure-u-1 top-nav">
                 <DashBoardTopView pathname={pathname} username="ybv"/>
               </div>
-          {artcileList}
-            <div className="pure-u-1">
-                <div className="pure-u-1-2">
-                  {this.state.prevUrl && (<a href="#" onClick={() => this.fetchArticles(false, true)}>
-                     prev</a>)}
+              <div className="pure-u-3-24">
+              </div>
+              <div className="pure-u-18-24">
+                <div className="pure-u-1">
+                {artcileList}
                 </div>
-                <div className="pure-u-1-2">
-                  {this.state.nextUrl && <a href="#" onClick={() => this.fetchArticles(true, false)}>
-                    next</a>}
+                  <div className="pure-u-1">
+                      <div className="pure-u-1-2">
+                        {this.state.prevUrl && (<a href="#" onClick={() => this.fetchArticles(false, true)}>
+                           prev</a>)}
+                      </div>
+                      <div className="pure-u-1-2">
+                        {this.state.nextUrl && <a href="#" onClick={() => this.fetchArticles(true, false)}>
+                          next</a>}
+                      </div>
                 </div>
-          </div>
+              </div>
+              <div className="pure-u-3-24">
+              </div>
       </div>
       </div>
     )
@@ -453,7 +477,7 @@ const Login = React.createClass({
                   </div>
                   <br/>
                 <div className="pure-control-group">
-                   <label><input ref="pass" className="pure-input-1" placeholder="Password" required/></label><br />
+                   <label><input ref="pass" type="password" className="pure-input-1" placeholder="Password" required/></label><br />
                 </div>
                   <br/>
                   <button type="submit" className="pure-button pure-input-1 pure-button-primary">Log In</button>
@@ -481,10 +505,18 @@ const Logout = React.createClass({
 
   render() {
     return (  <div className="pure-g">
-        <div className="pure-u-1 hello-container">
-          <p>You are now logged out</p>
-          <Link to="/curate/login">Log in</Link>
-        </div>
+    <div className="pure-u-1-3">
+    </div>
+    <div className="pure-u-1-3">
+      <div className="pure-u-1 hello-container">
+        <p>You are now logged out</p>
+        <Link to="/curate/login">Log in</Link>
+      </div>
+    </div>
+    <div className="pure-u-1-3">
+    </div>
+
+
       </div>)
   }
 })
@@ -595,7 +627,7 @@ const SourceFeeds = React.createClass({
         xhr.setRequestHeader("Authorization", "Token " + token)
       }
     }).success(function(data) {
-      console.log(data);
+
       if (data && data.results) {
         that.setState({
           feeds: data.results
@@ -631,9 +663,8 @@ const SourceFeeds = React.createClass({
         xhr.setRequestHeader("Authorization", "Token " + token)
       }
     }).success((data) => {
-      console.log(data)
-      if (data && data.success) {
-
+      if (data) {
+        this.fetchFeeds()
       } else {
         that.setState({
           error: true,
@@ -647,13 +678,41 @@ const SourceFeeds = React.createClass({
       })
     });
   },
-
+  deleteFeed(feedUrl) {
+    event.preventDefault()
+    const token = auth.getToken()
+    $.ajax({
+      url: "/curate/api/sourcefeeds/",
+      type: 'DELETE',
+      data: {
+        'url': feedUrl,
+      },
+      beforeSend: function(xhr) {
+        xhr.setRequestHeader("Authorization", "Token " + token)
+      }
+    }).success((data) => {
+      if (data) {
+        this.fetchFeeds()
+      } else {
+        that.setState({
+          error: true,
+          msg: data.msg
+        })
+      }
+    }).error(() => {
+      that.setState({
+        error: true,
+        msg: 'Could not delete feed'
+      })
+    });
+  },
   render() {
     const rows = this.state.feeds.map((val) => {
-      return (  <tr>
+      return (  <tr key={val.url}>
         <td>{val.name}</td>
         <td><a href="{val.url}">Link</a></td>
         <td>{val.created_by}</td>
+        <td><a href="#" onClick={this.deleteFeed.bind(this, val.url)}>Delete</a></td>
       </tr>)
     }
     )
@@ -663,23 +722,18 @@ const SourceFeeds = React.createClass({
         <div className="pure-u-1 top-nav">
           <DashBoardTopView pathname={pathname} username="ybv"/>
         </div>
-          <div className="pure-u-1">
+        <div className="pure-u-1">
+        <div className="pure-u-3-24">
+        </div>
+          <div className="pure-u-18-24">
             <div className="source-feed-container">
               <legend>Add new source</legend>
               <hr/>
-            <form className="pure-form pure-form-aligned"  onSubmit={this.handleSubmit}>
+            <form className="pure-form source-feed-form"  onSubmit={this.handleSubmit}>
               <fieldset>
-                <div className="pure-control-group">
-                  <label htmlFor="name">Feed Name</label>
-                  <input ref="name" required/>
-                </div>
-                <div className="pure-control-group">
-                  <label htmlFor="url">Feed Url</label>
-                  <input ref="url" p required/>
-                </div>
-                <div className="pure-controls">
-                  <button type="submit" className="pure-button">Add Source</button>
-                </div>
+                  <input ref="name" placeholder="Feed Name" required/>
+                  <input ref="url"  placeholder="Feed Url" required/>
+                  <button type="submit" className="pure-button pure-button-primary">Add Source</button>
               </fieldset>
             </form>
             <legend>Existing sources</legend>
@@ -693,6 +747,7 @@ const SourceFeeds = React.createClass({
                   <th>Feed Name(Unique)</th>
                   <th>Url</th>
                   <th>Added By</th>
+                  <th>Delete</th>
               </tr>
 
             </thead>
@@ -702,7 +757,11 @@ const SourceFeeds = React.createClass({
             </table>
             </div>
           </div>
+
           </div>
+          <div className="pure-u-3-24">
+          </div>
+        </div>
       </div>
 
     )

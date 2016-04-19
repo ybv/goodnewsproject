@@ -133,6 +133,7 @@ class ArticleDetail(APIView):
         sentiment = request.data.get('sentiment')
         resp = {'success': False}
 
+
         if sentiment == 'good':
             sentiment_score = 1.0
         if sentiment == 'bad':
@@ -186,6 +187,19 @@ class SourceFeedList(generics.ListCreateAPIView):
         try:
             s = SourceFeed.objects.get_or_create(url=request.data.get('url'), name=request.data.get('name'),
                 created_by=request.user)
+            resp.update({
+                'success': True
+            })
+        except Exception as e:
+            logger.warn(u"exception when saving source feed {e}".format(e=e))
+
+        return Response(resp)
+
+    def delete(self, request, format=None):
+        resp = {'success': False}
+        try:
+            s = SourceFeed.objects.get(url=request.data.get('url'))
+            s.delete()
             resp.update({
                 'success': True
             })
