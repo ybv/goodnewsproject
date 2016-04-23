@@ -1,4 +1,4 @@
-from django.http import HttpResponse
+from django.shortcuts import redirect
 
 def home_page(request):
-    return HttpResponse('hello world')
+    return redirect('/curate/')

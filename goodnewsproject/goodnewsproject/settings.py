@@ -25,7 +25,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = 'yuwxgq5-&#*ox6wcb5yw4x*gc=flf-&1xv(=c1ifpvw=wpcj2y'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False if os.getenv('ENV') == 'PRDO' else True
 
 ALLOWED_HOSTS = []
 
@@ -61,9 +61,6 @@ MIDDLEWARE_CLASSES = [
 CORS_ORIGIN_ALLOW_ALL = True
 
 REST_FRAMEWORK = {
-    # 'DEFAULT_PERMISSION_CLASSES': (
-    #     'rest_framework.permissions.IsAuthenticated',
-    # ),
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'rest_framework.authentication.SessionAuthentication',
         'rest_framework.authentication.TokenAuthentication',
@@ -99,11 +96,11 @@ WSGI_APPLICATION = 'goodnewsproject.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'ybv',
-        'USER': 'ybv',
-        'PASSWORD': 'root',
-        'HOST': 'localhost',
-        'PORT' : '',
+        'NAME': os.getenv('DB_NAME') or 'ybv',
+        'USER': os.getenv('DB_USER') or 'ybv',
+        'PASSWORD': os.getenv('DB_PASSWORD') or 'rootroot',
+        'HOST': os.getenv('DB_HOST') or 'localhost',
+        'PORT' : os.getenv('DB_PORT') or '5432' ,
     }
 }
 
@@ -154,7 +151,7 @@ INVITE_INITIAL_NUMBER_INVITATIONS = 3
 
 STATIC_URL = '/static/'
 
-SITE_URL = "http://127.0.0.1:8000/"
+SITE_URL = os.getenv('SITE_URL') or 'http://127.0.0.1:8000/'
 
 LOGGING = {
     'version': 1,

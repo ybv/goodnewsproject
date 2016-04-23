@@ -25,5 +25,6 @@ from goodnewsproject.views import home_page
 router = routers.DefaultRouter()
 
 urlpatterns = [
-    url(r'^curate/', include('curator.urls'))
+    url(r'^curate/', include('curator.urls')),
+    url(r'^.*$', home_page , name='catch-all')
 ]
