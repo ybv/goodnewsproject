@@ -96,9 +96,9 @@ WSGI_APPLICATION = 'goodnewsproject.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': os.getenv('DB_NAME') or 'ybv',
+        'NAME': os.getenv('DB_NAME') or 'gnpdb',
         'USER': os.getenv('DB_USER') or 'ybv',
-        'PASSWORD': os.getenv('DB_PASSWORD') or 'rootroot',
+        'PASSWORD': os.getenv('DB_PASSWORD') or '',
         'HOST': os.getenv('DB_HOST') or 'localhost',
         'PORT' : os.getenv('DB_PORT') or '5432' ,
     }

@@ -29,7 +29,6 @@ def send_curator_invite(curator_email=None):
 
 
 def activate_curator(username, password, email, first_name, last_name):
-    print username, password, email, first_name, last_name
     if not all([username, password, email, first_name, last_name]):
         return (False, 'Provide all fields')
 
@@ -63,6 +62,7 @@ def was_curator_invited(emailsha):
 
     try:
         email = unquote(base64.b64decode(emailsha))
+        email = email.decode('unicode-escape')
     except Exception as e:
         logging.error(u"Error when decoding emailsha")
         return False
